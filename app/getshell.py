@@ -61,6 +61,20 @@ def get(arch, sname, opt, fm, xor):
                 return scode
             elif fm == 'hex':
                 return enhex(scode)
+            elif fm == 'python':
+                _xscode = []
+                _xscode.append('shellcode = ""\n')
+                _xdiv = len(scode) / (16)
+                _xmod = len(scode) % (16)
+                _x = 0
+                for _i in range(0, _xdiv):
+                    _xscode.append('shellcode += %s' % _string(scode[_i*16:(_i+1)*16]))
+                    _x = _x + 1
+                if _xmod:
+                    _xscode.append('shellcode += %s' % _string(scode[(_i+1)*16:]))
+                xtemp = "// shellcode's length is : %s\n" % (len(scode))
+                xtemp += ''.join(_xscode)
+                return xtemp
             else:
                 return _string(scode)
 
